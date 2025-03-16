@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiply by 1000 Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e6f3ff;
+        }
+        .game-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.3),
+                        0 0 40px rgba(0, 123, 255, 0.2),
+                        0 0 60px rgba(0, 123, 255, 0.1);
+            text-align: center;
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 20px rgba(0, 123, 255, 0.3),
+                            0 0 40px rgba(0, 123, 255, 0.2),
+                            0 0 60px rgba(0, 123, 255, 0.1);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(0, 123, 255, 0.4),
+                            0 0 50px rgba(0, 123, 255, 0.3),
+                            0 0 70px rgba(0, 123, 255, 0.2);
+            }
+        }
+        .game-area {
+            border: 2px dotted #007bff;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f0f8ff;
+        }
+        input {
+            width: 100px;
+            padding: 5px;
+            font-size: 16px;
+            -moz-appearance: textfield;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Multiply by 1000 Game</h1>
+        <div class="game-area">
+            <p id="question"></p>
+            <input type="number" id="answer" step="0.001">
+            <button onclick="checkAnswer()">Submit</button>
+            <p id="feedback"></p>
+        </div>
+        <p>Score: <span id="score">0</span></p>
+    </div>
+
+    <script>
+        let score = 0;
+        let currentNumber;
+
+        function generateQuestion() {
+            const decimalPlaces = Math.floor(Math.random() * 3) + 1;
+            currentNumber = (Math.random() * 9 + 1).toFixed(decimalPlaces);
+            document.getElementById('question').textContent = `${currentNumber} x 1000 = ?`;
+            document.getElementById('answer').value = '';
+            document.getElementById('feedback').textContent = '';
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseFloat(document.getElementById('answer').value);
+            const correctAnswer = currentNumber * 1000;
+            const feedback = document.getElementById('feedback');
+
+            if (Math.abs(userAnswer - correctAnswer) < 0.001) {
+                score++;
+                feedback.textContent = 'Correct!';
+                feedback.style.color = 'green';
+            } else {
+                feedback.textContent = `Incorrect. The correct answer is ${correctAnswer}.`;
+                feedback.style.color = 'red';
+            }
+
+            document.getElementById('score').textContent = score;
+            setTimeout(generateQuestion, 2000);
+        }
+
+        document.getElementById('answer').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        generateQuestion();
+    </script>
+</body>
+</html>
